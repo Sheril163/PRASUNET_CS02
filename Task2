@@ -1,0 +1,44 @@
+from PIL import Image
+
+def encrypt_image(input_path, output_path, key):
+    image = Image.open(input_path)
+    pixels = image.load()
+
+    width, height = image.size
+
+    for y in range(height):
+        for x in range(width):
+            r, g, b = pixels[x, y]
+
+            r = (r + key) % 256
+            g = (g + key) % 256
+            b = (b + key) % 256
+
+            pixels[x, y] = (r, g, b)
+
+    image.save(output_path)
+    print(f'Encrypted image saved as {output_path}')
+
+def decrypt_image(input_path, output_path, key):
+    image = Image.open(input_path)
+    pixels = image.load()
+
+    width, height = image.size
+
+    for y in range(height):
+        for x in range(width):
+            r, g, b = pixels[x, y]
+
+            r = (r - key) % 256
+            g = (g - key) % 256
+            b = (b - key) % 256
+
+            pixels[x, y] = (r, g, b)
+
+    image.save(output_path)
+    print(f'Decrypted image saved as {output_path}')
+
+key = 123 
+
+encrypt_image('input_image.png', 'encrypted_image.png', key)
+decrypt_image('encrypted_image.png', 'decrypted_image.png', key)
